@@ -4,56 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F5F5"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/txtStatusOutsideInside"
+    <LinearLayout
+        android:id="@+id/grpCurrentStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
-        android:text="You're Currently !"
-        android:textSize="22dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/txtUVI"
+        <TextView
+            android:id="@+id/txtCurrentStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txtCurrentStatus"
+            android:textSize="26sp"
+            android:paddingEnd="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/valCurrentStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inside"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="!"
+            android:textSize="26sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/grpVitaminD"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="UVI: "
-        android:textSize="20dp"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
-        app:layout_constraintEnd_toEndOf="@+id/progressBar2"
-        app:layout_constraintStart_toStartOf="@+id/progressBar2"
-        app:layout_constraintTop_toTopOf="@+id/progressBar2" />
-
-    <!--  TESTING ONLY  -->
-
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="90dp"
-        android:max="100"
-        android:padding="25dp"
-        android:progress="75"
-        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_marginTop="60dp"
+        android:padding="30dp"
+        android:background="@drawable/shadow"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtStatusOutsideInside" />
+        app:layout_constraintTop_toBottomOf="@+id/grpCurrentStatus">
 
-    <Button
-        android:id="@+id/btnLocation"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Vitamin D Intake"
+            android:textSize="20sp"/>
+
+        <ProgressBar
+            android:id="@+id/mtrVitaminD"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="275dp"
+            android:layout_height="275dp"
+            android:layout_marginTop="20dp"
+            android:padding="18dp"
+            android:max="100"
+            android:progress="75"
+            android:progressDrawable="@drawable/circular_progress_bar"/>
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
-        android:text="Location?"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/grpVitaminD"
+        app:layout_constraintEnd_toEndOf="@+id/grpVitaminD"
+        app:layout_constraintStart_toStartOf="@id/grpVitaminD"
+        app:layout_constraintTop_toTopOf="@+id/grpVitaminD">
+
+        <TextView
+            android:id="@+id/txtUVI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="6dp"
+            android:text="UVI:"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/valUVI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11"
+            android:textSize="24sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

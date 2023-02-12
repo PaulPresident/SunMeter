@@ -4,7 +4,10 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
@@ -44,17 +47,35 @@ class LocationService: Service() {
         val notification = NotificationCompat.Builder(this, "location")
             .setContentTitle("Tracking location...")
             .setContentText("Location: null")
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.notification)
             .setOngoing(true)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         locationClient
-            .getLocationUpdates(10000L)
+            .getLocationUpdates(FG_SERVICE_DELAY)
             .catch { e -> e.printStackTrace() }
-            .onEach { location ->
-                val lat = location.latitude.toString().takeLast(3)
-                val long = location.longitude.toString().takeLast(3)
+            .onEach { location ->   // content executes every <interval> as the FG service
+                // VitaminD Calculator Class
+                val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+                val calculator = VitaminDProductionCalculator(sharedPreferences)
+                calculator.isUserOutside(location)
+
+                // Daily vitaminD production is reached
+                if ( calculator.getVitaminD() > 100 ) {
+                    calculator.setVitaminD(100F)
+                    val notifyVitaminD = NotificationCompat.Builder(this, "vitaminD100")
+                        .setContentTitle("Vitamin D")
+                        .setContentText("Congrats! You have reached 100% of your daily Vitamin D intake requirement.")
+                        .setSmallIcon(R.drawable.notification)
+                        .setOngoing(true)
+                    notificationManager.notify(2, notifyVitaminD.build())
+                    stop()
+                }
+
+                // Update Notification TODO Remove
+                val lat = location.latitude.toString()
+                val long = location.longitude.toString()
                 val updatedNotification = notification.setContentText(
                     "Location: ($lat, $long)"
                 )
@@ -66,7 +87,11 @@ class LocationService: Service() {
     }
 
     private fun stop() {
-        stopForeground(true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            stopForeground(true)
+        }
         stopSelf()
     }
 
