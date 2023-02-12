@@ -19,9 +19,7 @@ class VitaminDProductionCalculator(prefs: SharedPreferences) {
     }
 
     fun isUserOutside(location: Location): Boolean {
-//        val accuracy = location.accuracy
-        val accuracy = 55
-//        Log.e("GPS ACCURACY", accuracy.toString())
+        val accuracy = location.accuracy
         if ( accuracy > 50 ) {
             if ( store.getBoolean(STORE_USER_OUTSIDE, false) ) {
                 addVitaminD( FG_SERVICE_DELAY_MINS )  // user was and is still outside

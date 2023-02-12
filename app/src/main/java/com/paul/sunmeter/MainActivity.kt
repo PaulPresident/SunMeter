@@ -13,6 +13,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -87,32 +90,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun storeUVI(prefs : SharedPreferences) {
-        updateStore(prefs, STORE_UVI, 8)
-//        val myHeaders = Headers.Builder()
-//        myHeaders.add("x-access-token", "openuv-3060ohwrle0athkb-io")
-//        myHeaders.add("Content-Type", "application/json")
-//
-//        val requestOptions = Request.Builder()
-//            .url("https://api.openuv.io/api/v1/uv?lat=19.07&lng=72.87&alt=100&dt=")
-//            .headers(myHeaders.build())
-//            .get()
-//            .build()
-//
-//        val client = OkHttpClient()
-//        client.newCall(requestOptions).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                Log.e("error", e.toString())
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                val rawData = JSONObject(response.body()!!.string())
-//                val res = JSONObject(rawData.get("result").toString())
-//
-//                val uvi = (res.get("uv") as Double).toInt().toString()
-////                Log.e("UVI",uvi)
-//                updateStore(prefs, STORE_UVI, uvi)
-//            }
-//        })
+//        updateStore(prefs, STORE_UVI, 8)   // The API has a daily limit switch to this for testing instead
+        val myHeaders = Headers.Builder()
+        myHeaders.add("x-access-token", "openuv-3060ohwrle0athkb-io")
+        myHeaders.add("Content-Type", "application/json")
+
+        val requestOptions = Request.Builder()
+            // location coordinates of Mumbai, India for the sake of testing (need high UVI for testing)
+            .url("https://api.openuv.io/api/v1/uv?lat=19.07&lng=72.87&alt=100&dt=")
+            .headers(myHeaders.build())
+            .get()
+            .build()
+
+        val client = OkHttpClient()
+        client.newCall(requestOptions).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("error", e.toString())
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val rawData = JSONObject(response.body()!!.string())
+                val res = JSONObject(rawData.get("result").toString())
+
+                val uvi = (res.get("uv") as Double).toInt().toString()
+                updateStore(prefs, STORE_UVI, uvi)
+            }
+        })
     }
 
     private fun updateStore( store: SharedPreferences, store_id: String, value: Any ) {
